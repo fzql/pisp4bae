@@ -20,7 +20,7 @@ Call `pisp_shear` for the more optimal algorithm out of the two.
 
 Manuscript is being submitted.
 
-`pip` is based on [Sunday (2021)](Practical Geometry Algorithms: with C++ Code).
+`pip` is based on [Sunday (2021)](https://www.amazon.com/Practical-Geometry-Algorithms-C-Code/dp/B094T8MVJP).
 
 `institutions.mat` is sourced from
 [`tl\_2012\_us\_state.shp`](https://www.sciencebase.gov/catalog/item/52c78623e4b060b9ebca5be5).
