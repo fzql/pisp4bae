@@ -21,3 +21,10 @@ Call `pisp_shear` for the more optimal algorithm out of the two.
 Manuscript is being submitted.
 
 `pip` is based on [Sunday (2021)](Practical Geometry Algorithms: with C++ Code).
+
+`institutions.mat` is sourced from
+[`tl\_2012\_us\_state.shp`](https://www.sciencebase.gov/catalog/item/52c78623e4b060b9ebca5be5).
+
+`states.mat` is sourced manually from
+[List of research universities in the United States](https://en.wikipedia.org/wiki/List_of_research_universities_in_the_United_States)
+and Apple Maps.
