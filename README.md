@@ -22,9 +22,9 @@ Manuscript is being submitted.
 
 `pip` is based on [Sunday (2021)](https://www.amazon.com/Practical-Geometry-Algorithms-C-Code/dp/B094T8MVJP).
 
-`institutions.mat` is sourced from
+`states.mat` is sourced from
 [tl_2012_us_state.shp](https://www.sciencebase.gov/catalog/item/52c78623e4b060b9ebca5be5).
 
-`states.mat` is sourced manually from
+`institutions.mat` is sourced manually from
 [List of research universities in the United States](https://en.wikipedia.org/wiki/List_of_research_universities_in_the_United_States)
 and Apple Maps.
