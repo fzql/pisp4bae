@@ -2,6 +2,24 @@
 %
 % MIT License
 % Copyright (c) 2023--2024 Ziqiang Li, Jindi Sun
+%% Brand new test cases
+case_load_artificial
+
+for i = 1:length(Q)
+    [S,g1,g2] = pisp(Q{i},G{i});
+    fprintf('Case %d (%s): ',i,fileName{i});
+    switch S
+        case -1
+            fprintf('exterior\n');
+        case 0
+            fprintf('boundary\n');
+        case 1
+            fprintf('interior\n');
+        otherwise
+            fprintf('error\n');
+    end
+end
+
 %% Artificial Test Case
 pa2xyz = @(p,a) [sin(p)*cos(a) sin(p)*sin(a) cos(p)];
 Q{1} = pa2xyz(0,0); % Test point Cartesian coordinates

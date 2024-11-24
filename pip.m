@@ -1,17 +1,19 @@
 %PIP Decides the point-in-polygon (PiP) problem
-%   [S,W,B] = pip(X,Y) determines if the origin o(0,0) lies in
-%   a polygon g with n sides. X and Y contain the Cartesian
-%   coordinates of a vertex of g
+%   [S,B] = pip(g) determines if the origin o(0,0) lies in the interior of,
+%   on the boundary of, or to the exterior of an n-sided general polygon g.
+%   The size of g is 2xn, where each column contains the Cartesian
+%   coordinates of a vertex
 %
 %   Value of S: 1 (interior), 0 (boundary), -1 (exterior)
-%   Value of W: Winding number or nan (undefined)
 %   Values of B: Index of edges that contain o.
 %   
 %   Reference: Sunday (2021)
 %
 % MIT License
 % Copyright (c) 2023--2024 Ziqiang Li, Jindi Sun
-function [S,W,B] = pip(X,Y)
+function [S,B] = pip(g)
+    X = g(1,:);
+    Y = g(2,:);
     n = length(X);
     W = 0;
     B = false(1,n);
@@ -21,11 +23,11 @@ function [S,W,B] = pip(X,Y)
         else
             J = 1;
         end
-        % Q-on-side judgement
+        % Modification: Q-on-side judgement
         if X(I)*Y(J)-Y(I)*X(J)==0 && X(I)*X(J)<=0 && Y(I)*Y(J)<=0
             B(I) = true;
             W = nan;
-        end
+        end % Modification ended
         if ~isnan(W)
             if Y(I)<=0
                 if Y(J)>0
@@ -51,9 +53,10 @@ function [S,W,B] = pip(X,Y)
             S = -1;
         end
     end
+    B = find(B);
 end
 
-%ISLEFT Is the origin O to the left of the vector AB?
+%ISLEFT Is the origin o(0,0) to the left of the geometric vector AB?
 %   A = isLeft(x1,y1,x2,y2) calculates the signed area of the
 %   triangle OAB specified by A(x1,y1) and B(x2,y2)
 %
@@ -63,6 +66,6 @@ end
 %       If A is negative, then O is right of vector AB
 %
 %   Reference: Sunday (2021)
-function area = isLeft(x1,y1,x2,y2)
-    area = x1*(y2-y1)-(x2-x1)*y1;
+function A = isLeft(x1,y1,x2,y2)
+    A = x1*(y2-y1)-(x2-x1)*y1;
 end
