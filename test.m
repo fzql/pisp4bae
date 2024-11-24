@@ -55,3 +55,13 @@ for i = 1:size(points,1)
     %fprintf('%s: %s\n',name,strjoin(where,', '))
 end
 toc
+
+%% Generate tikz pictures
+P = [1 0 0;0 1 0;0 0 1];
+nView = [1 1 1];
+pisp2tikz(P,'test')
+
+%% Generate tikz pictures
+P = [1 0 0;0 0 -1;0 1 0];
+nView = [1;1;1];
+pisp2tikz(P,'test',nView)
