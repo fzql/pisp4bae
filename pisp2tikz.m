@@ -49,10 +49,7 @@ fprintf(f,"\\usetikzlibrary{decorations.markings}\n");
 fprintf(f,"%% nView = [%g;%g;%g];\n",nView(1),nView(2),nView(3));
 fprintf(f,"\\tdplotsetmaincoords{%g}{%g}\n",az,el);
 fprintf(f,"\\begin{document}\n");
-fprintf(f,"\\begin{tikzpicture}[decoration={\n");
-fprintf(f,"  markings,\n");
-fprintf(f,"  mark=at position 0.5 with {\\arrow{>}}\n");
-fprintf(f,"}]\n");
+fprintf(f,"\\begin{tikzpicture}[]\n");
 
 fprintf(f,"\\pgfmathsetmacro{\\r}{%g}\n",radius);
 
@@ -109,32 +106,41 @@ for i = 1:n
             fprintf(f,"%% arc from P%d to P%d (first half)\n",i-1,j-1);
             fprintf(f,"\\tdplotdefinepoints(0,0,0)(%g,%g,%g)(%g,%g,%g)\n", ...
                 P(i,1),P(i,2),P(i,3),mP(i,1),mP(i,2),mP(i,3));
+            fprintf(f,"\\tdplotdrawpolytopearc[thick,dashed]{\\r}{}{}\n");
         else
             fprintf(f,"%% arc from P%d to P%d (second half)\n",i-1,j-1);
             fprintf(f,"\\tdplotdefinepoints(0,0,0)(%g,%g,%g)(%g,%g,%g)\n", ...
                 mP(i,1),mP(i,2),mP(i,3),P(j,1),P(j,2),P(j,3));
+            fprintf(f,"\\tdplotdrawpolytopearc[thick,dashed,decoration={\n");
+            fprintf(f,"  markings,\n");
+            fprintf(f,"  mark=at position 0 with {\\arrow{>}}\n");
+            fprintf(f,"},postaction={decorate}]{\\r}{}{}\n");
         end
     else
         fprintf(f,"%% arc from P%d to P%d\n",i-1,j-1);
         fprintf(f,"\\tdplotdefinepoints(0,0,0)(%g,%g,%g)(%g,%g,%g)\n", ...
             P(i,1),P(i,2),P(i,3),P(j,1),P(j,2),P(j,3));
+        fprintf(f,"\\tdplotdrawpolytopearc[thick,dashed,decoration={\n");
+            fprintf(f,"  markings,\n");
+            fprintf(f,"  mark=at position 0.5 with {\\arrow{>}}\n");
+            fprintf(f,"},postaction={decorate}]{\\r}{}{}\n");
     end
-    fprintf(f,"\\tdplotdrawpolytopearc[dashed,postaction={decorate}]{\\r}{}{}\n");
 end
 
 % Important labels
 fprintf(f,"\\path[fill=black] (O) circle (1pt) node[anchor=3*30]{$O$};\n");
 
+% Drawing vertices
+for i = find(depth<0)'
+    fprintf(f,"%% vertex %d\n",i-1);
+    fprintf(f,"\\path[fill=black] (P%d) circle (1pt) node[anchor=0*30]{$P_{%d}$};\n",...
+        i-1,i-1);
+end
+
 % Drawing test point
 if dot(nView,Q)<0
     fprintf(f,"%% Test point\n");
     fprintf(f,"\\path[fill=black] (Q) circle (1pt) node[anchor=0*30]{$Q$};\n");
-end
-
-for i = find(depth<0)'
-    fprintf(f,"%% vertex %d\n",i);
-    fprintf(f,"\\path[fill=black] (P%d) circle (1pt) node[anchor=0*30]{$P_{%d}$};\n",...
-        i-1,i-1);
 end
 
 fprintf(f,"\\end{scope}\n");
@@ -202,29 +208,38 @@ for i = 1:n
             fprintf(f,"%% arc from P%d to P%d (first half)\n",i-1,j-1);
             fprintf(f,"\\tdplotdefinepoints(0,0,0)(%g,%g,%g)(%g,%g,%g)\n", ...
                 P(i,1),P(i,2),P(i,3),mP(i,1),mP(i,2),mP(i,3));
+            fprintf(f,"\\tdplotdrawpolytopearc[thick]{\\r}{}{}\n");
         else
             fprintf(f,"%% arc from P%d to P%d (second half)\n",i-1,j-1);
             fprintf(f,"\\tdplotdefinepoints(0,0,0)(%g,%g,%g)(%g,%g,%g)\n", ...
                 mP(i,1),mP(i,2),mP(i,3),P(j,1),P(j,2),P(j,3));
+            fprintf(f,"\\tdplotdrawpolytopearc[thick,decoration={\n");
+            fprintf(f,"  markings,\n");
+            fprintf(f,"  mark=at position 0 with {\\arrow{>}}\n");
+            fprintf(f,"},postaction={decorate}]{\\r}{}{}\n");
         end
     else
         fprintf(f,"%% arc from P%d to P%d\n",i-1,j-1);
         fprintf(f,"\\tdplotdefinepoints(0,0,0)(%g,%g,%g)(%g,%g,%g)\n", ...
             P(i,1),P(i,2),P(i,3),P(j,1),P(j,2),P(j,3));
+        fprintf(f,"\\tdplotdrawpolytopearc[thick,decoration={\n");
+            fprintf(f,"  markings,\n");
+            fprintf(f,"  mark=at position 0.5 with {\\arrow{>}}\n");
+            fprintf(f,"},postaction={decorate}]{\\r}{}{}\n");
     end
-    fprintf(f,"\\tdplotdrawpolytopearc[thick,postaction={decorate}]{\\r}{}{}\n");
 end
 
+% Drawing vertices
 for i = find(depth>=0)'
-    fprintf(f,"%% vertex %d\n",i);
-    fprintf(f,"\\path[fill=black] (P%d) circle (1pt) node[anchor=0]{$P_{%d}$};\n",...
+    fprintf(f,"%% vertex %d\n",i-1);
+    fprintf(f,"\\path[fill=black] (P%d) circle (1pt) node[anchor=0*30]{$P_{%d}$};\n",...
         i-1,i-1);
 end
 
 % Drawing test point
 if dot(nView,Q)>=0
     fprintf(f,"%% Test point\n");
-    fprintf(f,"\\path[fill=black] (Q) circle (1pt) node[anchor=0]{$Q$};\n");
+    fprintf(f,"\\path[fill=black] (Q) circle (1pt) node[anchor=0*30]{$Q$};\n");
 end
 
 fprintf(f,"\\end{scope}\n");
