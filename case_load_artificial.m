@@ -109,7 +109,9 @@ for c = 1:length(xs)
     fileName{s} = sprintf('case-orientation-3-%d',c);
 end
 
-%% Uncomment to generate 3d figures
-% for i = 1:14
-%    pisp2tikz(Q{i},P{i},nView{i},fileName{i});
-% end
+%% Replace false by true to generate tikz pictures
+if false
+    for i = 1:14
+        pisp2tikz(Q{i},P{i},nView{i},fileName{i});
+    end
+end
