@@ -11,49 +11,36 @@
 %
 % MIT License
 % Copyright (c) 2023--2024 Ziqiang Li, Jindi Sun
-function [S,B] = pip(g)
-    X = g(1,:);
-    Y = g(2,:);
-    n = length(X);
-    W = 0;
-    B = false(1,n);
-    for I = 1:n
-        if I<n
-            J = I+1;
-        else
-            J = 1;
-        end
+function [w,B] = pip(g)
+    x = g(1,:);
+    y = g(2,:);
+    n = size(g,2);
+    w = 0;
+    b = false(1,n);
+    for i = 1:n
+        j = mod(i,n)+1;
         % Modification: Q-on-side judgement
-        if X(I)*Y(J)-Y(I)*X(J)==0 && X(I)*X(J)<=0 && Y(I)*Y(J)<=0
-            B(I) = true;
-            W = nan;
+        if x(i)*y(j)-y(i)*x(j)==0 && x(i)*x(j)<=0 && y(i)*y(j)<=0
+            b(i) = true;
+            w = nan;
         end % Modification ended
-        if ~isnan(W)
-            if Y(I)<=0
-                if Y(J)>0
-                    if isLeft(X(I),Y(I),X(J),Y(J)) > 0
-                        W = W+1;
+        if ~isnan(w)
+            if y(i)<=0
+                if y(j)>0
+                    if isLeft(x(i),y(i),x(j),y(j)) > 0
+                        w = w+1;
                     end
                 end
             else
-                if Y(J)<=0
-                    if isLeft(X(I),Y(I),X(J),Y(J)) < 0
-                        W = W-1;
+                if y(j)<=0
+                    if isLeft(x(i),y(i),x(j),y(j)) < 0
+                        w = w-1;
                     end
                 end
             end
         end
     end
-    if any(B)
-        S = 0;
-    else
-        if W>0
-            S = 1;
-        else 
-            S = -1;
-        end
-    end
-    B = find(B);
+    B = find(b);
 end
 
 %ISLEFT Is the origin o(0,0) to the left of the geometric vector AB?

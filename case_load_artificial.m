@@ -14,7 +14,6 @@ G{2} = [1 0          0         ;
 nView{2} = [1 1 1];
 fileName{2} = 'case-adt-2';
 
-
 %% ADT Case 3
 Q{3} = [0 0 -1];
 G{3} = [ 1/sqrt(2) 0  1/sqrt(2);
@@ -27,7 +26,7 @@ fileName{3} = 'case-adt-3';
 %% WIND Case 1
 n = 12;
 zs = [0 0.9 -0.9];
-for c = length(zs)
+for c = 1:length(zs)
     s = 3+c;
     Q{s} = [0 0 1];
     G{s} = zeros(n,3);
