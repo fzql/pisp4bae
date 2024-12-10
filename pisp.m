@@ -11,7 +11,10 @@
 % MIT License
 % Copyright (c) 2023--2024 Ziqiang Li, Jindi Sun
 function S = pisp(Q,G)
-    a = Q(1); b = Q(2); c = Q(3); n = size(G,2);
+    a = Q(1);
+    b = Q(2);
+    c = Q(3);
+    n = size(G,2);
     % Step 1
     if c>-1
         R = [1-a^2/(1+c)  -a*b/(1+c) -a;...
@@ -22,7 +25,8 @@ function S = pisp(Q,G)
     end
     G2 = R*G;
     % Step 2
-    g1 = G2(1:2,:); [W,B] = pip(g1);
+    g1 = G2(1:2,:);
+    [W,B] = pip(g1);
     if W>0
         S = 1; return
     elseif W<0
@@ -36,10 +40,6 @@ function S = pisp(Q,G)
         end
     end
     % Step 3
-    g2 = g1./(1-G2(3,:)); A = boundedArea(g2);
-    if A>0
-        S = 1;
-    else
-        S = -1;
-    end
+    A = boundedArea(G2);
+    S = sign(A);
 end

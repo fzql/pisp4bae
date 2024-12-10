@@ -1,15 +1,28 @@
 % BOUNDEDAREA Returns the bounded signed area of general polygon
-%   A = boundedArea(g) calculates the bounded signed area of the general
-%   polygon g using Green's theorem (trapezoid formula). The size of g is
+%   A = boundedArea(g,dtheta) calculates the bounded signed area of the projected
+%   polygon with vertices g using Green's theorem. The size of g is
 %   2xn, where each column contains the Cartesian coordinates of a vertex.
 %
-%   If g is orientable, then g is positively oriented iff A>0
-%   If g is orientable, then g is negatively oriented iff A<0
-%   If g is orientable, then g is null oriented iff A=0
-%   A>0 does not imply that g is positively oriented
-%   A<0 does not imply that g is negatively oriented
-%   A=0 does not imply that g is null oriented
-function A = boundedArea(g)
-x = g(1,:);y = g(2,:);
-A = .5*sum((x-x([2:end 1])).*(y+y([2:end 1])));
+%   Note: The sign of A cannot be used to infer the orientation of G, the
+%   spherical polygon whose stereographic projection is g, without knowing
+%   beforehand that G is orientable on S^2.
+function A = boundedArea(G)
+    % Signed area of bounded polygon
+    g = G(1:2,:)./(1-G(3,:));
+    gx = g(1,:);
+    gy = g(2,:);
+    A_polygon = sum((gx-gx([2:end 1])).*(gy+gy([2:end 1])));
+    % Section Area
+    CA = cross(cross(G,G(:,[2:end 1])),G);
+    CA = CA./vecnorm(CA);
+    CB = cross(cross(G(:,[2:end 1]),G),G(:,[2:end 1]));
+    CB = CB./vecnorm(CB);
+    tA = CA(1:2,:).*(1-G(3,:))+G(1:2,:).*CA(3,:);
+    tB = -(CB(1:2,:).*(1-G(3,[2:end 1]))+G(1:2,[2:end 1]).*CB(3,:));
+    dtheta = atan2((tA(1,:).*tB(2,:)-tA(2,:).*tB(1,:)),dot(tA,tB));
+    zsq = G(3,:).^2+CA(3,:).^2;
+    R = 1./sqrt(1-zsq);
+    R(~isfinite(R)) = 0;
+    A_additional = sum(R.^2.*(dtheta-sin(dtheta)));
+    A = (A_polygon+A_additional)/2;
 end
