@@ -7,12 +7,6 @@
 %   spherical polygon whose stereographic projection is g, without knowing
 %   beforehand that G is orientable on S^2.
 function A = boundedArea(G)
-    % Signed area of bounded polygon
-    g = G(1:2,:)./(1-G(3,:));
-    gx = g(1,:);
-    gy = g(2,:);
-    A_polygon = sum((gx-gx([2:end 1])).*(gy+gy([2:end 1])));
-    % Section Area
     CA = cross(cross(G,G(:,[2:end 1])),G);
     CA = CA./vecnorm(CA);
     CB = cross(cross(G(:,[2:end 1]),G),G(:,[2:end 1]));
@@ -23,6 +17,5 @@ function A = boundedArea(G)
     zsq = G(3,:).^2+CA(3,:).^2;
     R = 1./sqrt(1-zsq);
     R(~isfinite(R)) = 0;
-    A_additional = sum(R.^2.*(dtheta-sin(dtheta)));
-    A = (A_polygon+A_additional)/2;
+    A = sum(R.^2.*(dtheta))/2;
 end

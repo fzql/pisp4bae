@@ -42,4 +42,7 @@ function S = pisp(Q,G)
     % Step 3
     A = boundedArea(G2);
     S = sign(A);
+    if abs(A)<5*eps
+        warning('G is close to null-oriented.')
+    end
 end

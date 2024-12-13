@@ -108,9 +108,17 @@ for c = 1:length(xs)
     fileName{s} = sprintf('case-orientation-3-%d',c);
 end
 
+%% Null-oriented case
+Q{15} = [0 0 1];
+G{15} = [sqrt(3)/2 sqrt(3)/20*(5-sqrt(5)) sqrt(3/10);
+         0 sqrt(3/5) sqrt(3/10);
+         1/2 (5+3*sqrt(5))/20 sqrt(2/5)];
+nView{15} = [1 1 1];
+fileName{15} = 'case-null';
+
 %% Replace false by true to generate tikz pictures
 if false
-    for i = 1:14
-        pisp2tikz(Q{i},P{i},nView{i},fileName{i});
+    for i = 1:15
+        pisp2tikz(Q{i},G{i},nView{i},fileName{i});
     end
 end
