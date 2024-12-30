@@ -1,7 +1,7 @@
 %PISP4BAE Point-in-spherical-polygon algorithm w/ shearing transformation
-%   S = pisp4bae([a;b;c],G) determines if the given test point
+%   S = pisp4bae([a;b;c],G,E) determines if the given test point
 %   Q(a,b,c) lies in the interior of, on the boundary of, or to the
-%   exterior of a BAE-polygon G. The size of G is 3xn,
+%   exterior of a BAE/BAI-gon G (E=true/false). The size of G is 3xn,
 %   where each column contains the Cartesian coordinates of a vertex
 %
 %   The unit sphere must be centered at the origin
@@ -10,7 +10,7 @@
 %
 % MIT License
 % Copyright (c) 2023--2024 Ziqiang Li, Jindi Sun
-function S = pisp4bae(Q,G)
+function S = pisp4bae(Q,G,E)
     a = Q(1);
     b = Q(2);
     c = Q(3);
@@ -46,15 +46,23 @@ function S = pisp4bae(Q,G)
     % Step 2
     if w>0
         S = 1;
-    elseif w<=0
+    elseif w<0
         S = -1;
+    elseif w==0
+        if E
+            S = -1;
+        else
+            S = 1;
+        end
     else
         i = B(1);
         j = mod(i,n)+1;
         if dot(G(:,i)+G(:,j),Q)>0
             S = 0;
-        else
+        elseif E
             S = -1;
+        else
+            S = 1;
         end
     end
 end
