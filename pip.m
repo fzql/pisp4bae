@@ -11,36 +11,34 @@
 %
 % MIT License
 % Copyright (c) 2023--2024 Ziqiang Li, Jindi Sun
-function [w,B] = pip(g)
+function [w,B,cn] = pip(g)
     x = g(1,:);
     y = g(2,:);
     n = size(g,2);
-    w = 0;
-    b = false(1,n);
+    cn = zeros(1,n);
     for i = 1:n
         j = mod(i,n)+1;
         % Modification: Q-on-side judgement
         if x(i)*y(j)-y(i)*x(j)==0 && x(i)*x(j)<=0 && y(i)*y(j)<=0
-            b(i) = true;
-            w = nan;
-        end % Modification ended
-        if ~isnan(w)
+            cn(i) = NaN;
+        else % Modification: Retain individual crossing numbers
             if y(i)<=0
                 if y(j)>0
                     if isLeft(x(i),y(i),x(j),y(j)) > 0
-                        w = w+1;
+                        cn(i) = 1;
                     end
                 end
             else
                 if y(j)<=0
                     if isLeft(x(i),y(i),x(j),y(j)) < 0
-                        w = w-1;
+                        cn(i) = -1;
                     end
                 end
             end
         end
     end
-    B = find(b);
+    w = sum(cn);
+    B = find(isnan(cn));
 end
 
 %ISLEFT Is the origin o(0,0) to the left of the geometric vector AB?

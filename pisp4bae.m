@@ -10,7 +10,7 @@
 %
 % MIT License
 % Copyright (c) 2023--2024 Ziqiang Li, Jindi Sun
-function S = pisp4bae(Q,G,E)
+function [S,w,B,cn] = pisp4bae(Q,G,E)
     a = Q(1);
     b = Q(2);
     c = Q(3);
@@ -19,28 +19,28 @@ function S = pisp4bae(Q,G,E)
     % Step 1
     Q_1 = max(abs(Q));
     if abs(c) == Q_1
-        U = X-(a/c)*Z;
-        V = Y-(b/c)*Z;
+        U = c*X-a*Z;
+        V = c*Y-b*Z;
         if c>0
-            [w,B] = pip([U;V]);
+            [w,B,cn] = pip([U;V]);
         else
-            [w,B] = pip([V;U]);
+            [w,B,cn] = pip([V;U]);
         end
     elseif abs(b) == Q_1
-        U = Z-(c/b)*Y;
-        V = X-(a/b)*Y;
+        U = b*Z-c*Y;
+        V = b*X-a*Y;
         if b>0
-            [w,B] = pip([U;V]);
+            [w,B,cn] = pip([U;V]);
         else
-            [w,B] = pip([V;U]);
+            [w,B,cn] = pip([V;U]);
         end
     else
-        U = Y-(b/a)*X;
-        V = Z-(c/a)*X;
+        U = a*Y-b*X;
+        V = a*Z-c*X;
         if a>0
-            [w,B] = pip([U;V]);
+            [w,B,cn] = pip([U;V]);
         else
-            [w,B] = pip([V;U]);
+            [w,B,cn] = pip([V;U]);
         end
     end
     % Step 2
